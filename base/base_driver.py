@@ -47,3 +47,4 @@ class BaseDriver:
         self.wait.until(EC.element_to_be_clickable(element)).click()
 
 
+    # some lines from sdet1
