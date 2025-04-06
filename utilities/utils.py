@@ -66,19 +66,35 @@ class Utils(softest.TestCase):
 
     def read_data_from_csv(filename):
         # Create an empty list
-        datalist= []
+        datalist = []
 
-        #Open CSV file
-        csvdata = open(filename,"r")
+        # Open CSV file
+        with open(filename, "r") as csvdata:  # Use 'with' for proper file handling
+            # Create a csv reader
+            reader = csv.reader(csvdata)
 
-        # Create a csv reader
-        reader = csv.reader(csvdata)
+            # Skip the header
+            next(reader)
 
-        # Skip the header
-        next(reader)
+            # Month abbreviation to full name mapping
+            month_map = {
+                "Jan": "January", "Feb": "February", "Mar": "March", "Apr": "April",
+                "May": "May", "Jun": "June", "Jul": "July", "Aug": "August",
+                "Sep": "September", "Oct": "October", "Nov": "November", "Dec": "December"
+            }
 
-        # add csv rows to empty list
-        for rows in reader:
-            datalist.append(rows)
+            # Add csv rows to empty list with date conversion
+            for rows in reader:
+                if len(rows) >= 3:  # Ensure there are at least 3 columns (departuredate is the 3rd)
+                    date_str = rows[2]  # Assuming departuredate is the third column
+                    if "-" in date_str:
+                        try:
+                            day, month_abbr, year = date_str.split("-")
+                            month = month_map[month_abbr]
+                            # Assuming '25' means 2025 (adjust based on your needs)
+                            rows[2] = f"{day} {month} 2025"
+                        except (ValueError, KeyError) as e:
+                            print(f"Error converting date {date_str}: {e}")
+                datalist.append(rows)
 
         return datalist
