@@ -3,332 +3,11 @@
   <head>
     <meta charset="utf-8"/>
     <title id="head-title">My First Automation Test Case Report</title>
-      <style type="text/css">body {
-  font-family: Helvetica, Arial, sans-serif;
-  font-size: 12px;
-  /* do not increase min-width as some may use split screens */
-  min-width: 800px;
-  color: #999;
-}
-
-h1 {
-  font-size: 24px;
-  color: black;
-}
-
-h2 {
-  font-size: 16px;
-  color: black;
-}
-
-p {
-  color: black;
-}
-
-a {
-  color: #999;
-}
-
-table {
-  border-collapse: collapse;
-}
-
-/******************************
- * SUMMARY INFORMATION
- ******************************/
-#environment td {
-  padding: 5px;
-  border: 1px solid #e6e6e6;
-  vertical-align: top;
-}
-#environment tr:nth-child(odd) {
-  background-color: #f6f6f6;
-}
-#environment ul {
-  margin: 0;
-  padding: 0 20px;
-}
-
-/******************************
- * TEST RESULT COLORS
- ******************************/
-span.passed,
-.passed .col-result {
-  color: green;
-}
-
-span.skipped,
-span.xfailed,
-span.rerun,
-.skipped .col-result,
-.xfailed .col-result,
-.rerun .col-result {
-  color: orange;
-}
-
-span.error,
-span.failed,
-span.xpassed,
-.error .col-result,
-.failed .col-result,
-.xpassed .col-result {
-  color: red;
-}
-
-.col-links__extra {
-  margin-right: 3px;
-}
-
-/******************************
- * RESULTS TABLE
- *
- * 1. Table Layout
- * 2. Extra
- * 3. Sorting items
- *
- ******************************/
-/*------------------
- * 1. Table Layout
- *------------------*/
-#results-table {
-  border: 1px solid #e6e6e6;
-  color: #999;
-  font-size: 12px;
-  width: 100%;
-}
-#results-table th,
-#results-table td {
-  padding: 5px;
-  border: 1px solid #e6e6e6;
-  text-align: left;
-}
-#results-table th {
-  font-weight: bold;
-}
-
-/*------------------
- * 2. Extra
- *------------------*/
-.logwrapper {
-  max-height: 230px;
-  overflow-y: scroll;
-  background-color: #e6e6e6;
-}
-.logwrapper.expanded {
-  max-height: none;
-}
-.logwrapper.expanded .logexpander:after {
-  content: "collapse [-]";
-}
-.logwrapper .logexpander {
-  z-index: 1;
-  position: sticky;
-  top: 10px;
-  width: max-content;
-  border: 1px solid;
-  border-radius: 3px;
-  padding: 5px 7px;
-  margin: 10px 0 10px calc(100% - 80px);
-  cursor: pointer;
-  background-color: #e6e6e6;
-}
-.logwrapper .logexpander:after {
-  content: "expand [+]";
-}
-.logwrapper .logexpander:hover {
-  color: #000;
-  border-color: #000;
-}
-.logwrapper .log {
-  min-height: 40px;
-  position: relative;
-  top: -50px;
-  height: calc(100% + 50px);
-  border: 1px solid #e6e6e6;
-  color: black;
-  display: block;
-  font-family: "Courier New", Courier, monospace;
-  padding: 5px;
-  padding-right: 80px;
-  white-space: pre-wrap;
-}
-
-div.media {
-  border: 1px solid #e6e6e6;
-  float: right;
-  height: 240px;
-  margin: 0 5px;
-  overflow: hidden;
-  width: 320px;
-}
-
-.media-container {
-  display: grid;
-  grid-template-columns: 25px auto 25px;
-  align-items: center;
-  flex: 1 1;
-  overflow: hidden;
-  height: 200px;
-}
-
-.media-container--fullscreen {
-  grid-template-columns: 0px auto 0px;
-}
-
-.media-container__nav--right,
-.media-container__nav--left {
-  text-align: center;
-  cursor: pointer;
-}
-
-.media-container__viewport {
-  cursor: pointer;
-  text-align: center;
-  height: inherit;
-}
-.media-container__viewport img,
-.media-container__viewport video {
-  object-fit: cover;
-  width: 100%;
-  max-height: 100%;
-}
-
-.media__name,
-.media__counter {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  flex: 0 0 25px;
-  align-items: center;
-}
-
-.collapsible td:not(.col-links) {
-  cursor: pointer;
-}
-.collapsible td:not(.col-links):hover::after {
-  color: #bbb;
-  font-style: italic;
-  cursor: pointer;
-}
-
-.col-result {
-  width: 130px;
-}
-.col-result:hover::after {
-  content: " (hide details)";
-}
-
-.col-result.collapsed:hover::after {
-  content: " (show details)";
-}
-
-#environment-header h2:hover::after {
-  content: " (hide details)";
-  color: #bbb;
-  font-style: italic;
-  cursor: pointer;
-  font-size: 12px;
-}
-
-#environment-header.collapsed h2:hover::after {
-  content: " (show details)";
-  color: #bbb;
-  font-style: italic;
-  cursor: pointer;
-  font-size: 12px;
-}
-
-/*------------------
- * 3. Sorting items
- *------------------*/
-.sortable {
-  cursor: pointer;
-}
-.sortable.desc:after {
-  content: " ";
-  position: relative;
-  left: 5px;
-  bottom: -12.5px;
-  border: 10px solid #4caf50;
-  border-bottom: 0;
-  border-left-color: transparent;
-  border-right-color: transparent;
-}
-.sortable.asc:after {
-  content: " ";
-  position: relative;
-  left: 5px;
-  bottom: 12.5px;
-  border: 10px solid #4caf50;
-  border-top: 0;
-  border-left-color: transparent;
-  border-right-color: transparent;
-}
-
-.hidden, .summary__reload__button.hidden {
-  display: none;
-}
-
-.summary__data {
-  flex: 0 0 550px;
-}
-.summary__reload {
-  flex: 1 1;
-  display: flex;
-  justify-content: center;
-}
-.summary__reload__button {
-  flex: 0 0 300px;
-  display: flex;
-  color: white;
-  font-weight: bold;
-  background-color: #4caf50;
-  text-align: center;
-  justify-content: center;
-  align-items: center;
-  border-radius: 3px;
-  cursor: pointer;
-}
-.summary__reload__button:hover {
-  background-color: #46a049;
-}
-.summary__spacer {
-  flex: 0 0 550px;
-}
-
-.controls {
-  display: flex;
-  justify-content: space-between;
-}
-
-.filters,
-.collapse {
-  display: flex;
-  align-items: center;
-}
-.filters button,
-.collapse button {
-  color: #999;
-  border: none;
-  background: none;
-  cursor: pointer;
-  text-decoration: underline;
-}
-.filters button:hover,
-.collapse button:hover {
-  color: #ccc;
-}
-
-.filter__label {
-  margin-right: 10px;
-}
-
-      </style>
-    
+      <link href="assets\style.css" rel="stylesheet" type="text/css"/>
   </head>
   <body>
     <h1 id="title">My First Automation Test Case Report</h1>
-    <p>Report generated on 20-Mar-2025 at 00:37:30 by <a href="https://pypi.python.org/pypi/pytest-html">pytest-html</a>
+    <p>Report generated on 06-Apr-2025 at 11:54:31 by <a href="https://pypi.python.org/pypi/pytest-html">pytest-html</a>
         v4.1.1</p>
     <div id="environment-header">
       <h2>Environment</h2>
@@ -382,7 +61,7 @@ div.media {
         <h2>Summary</h2>
         <div class="additional-summary prefix">
         </div>
-        <p class="run-count">2 tests took 00:04:17.</p>
+        <p class="run-count">0 test took 00:00:09.</p>
         <p class="filter">(Un)check the boxes to filter the results.</p>
         <div class="summary__reload">
           <div class="summary__reload__button hidden" onclick="location.reload()">
@@ -392,10 +71,10 @@ div.media {
         <div class="summary__spacer"></div>
         <div class="controls">
           <div class="filters">
-            <input checked="true" class="filter" name="filter_checkbox" type="checkbox" data-test-result="failed" />
-            <span class="failed">1 Failed,</span>
-            <input checked="true" class="filter" name="filter_checkbox" type="checkbox" data-test-result="passed" />
-            <span class="passed">1 Passed,</span>
+            <input checked="true" class="filter" name="filter_checkbox" type="checkbox" data-test-result="failed" disabled/>
+            <span class="failed">0 Failed,</span>
+            <input checked="true" class="filter" name="filter_checkbox" type="checkbox" data-test-result="passed" disabled/>
+            <span class="passed">0 Passed,</span>
             <input checked="true" class="filter" name="filter_checkbox" type="checkbox" data-test-result="skipped" disabled/>
             <span class="skipped">0 Skipped,</span>
             <input checked="true" class="filter" name="filter_checkbox" type="checkbox" data-test-result="xfailed" disabled/>
@@ -429,7 +108,7 @@ div.media {
     </table>
   </body>
   <footer>
-    <div id="data-container" data-jsonblob="{&#34;environment&#34;: {&#34;Python&#34;: &#34;3.12.8&#34;, &#34;Platform&#34;: &#34;Windows-10-10.0.19045-SP0&#34;, &#34;Packages&#34;: {&#34;pytest&#34;: &#34;8.3.4&#34;, &#34;pluggy&#34;: &#34;1.5.0&#34;}, &#34;Plugins&#34;: {&#34;Faker&#34;: &#34;35.0.0&#34;, &#34;html&#34;: &#34;4.1.1&#34;, &#34;metadata&#34;: &#34;3.1.1&#34;}}, &#34;tests&#34;: {&#34;testcases/test_searchflights.py::TestSearchAndVerifyFilter::test_search_flights_1_stop_1___New_Delhi____New____28_March_2025____1_Stop__&#34;: [{&#34;extras&#34;: [{&#34;name&#34;: &#34;URL&#34;, &#34;format_type&#34;: &#34;url&#34;, &#34;content&#34;: &#34;https://www.yatra.com/&#34;, &#34;mime_type&#34;: null, &#34;extension&#34;: null}], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;testcases/test_searchflights.py::TestSearchAndVerifyFilter::test_search_flights_1_stop_1___New_Delhi____New____28_March_2025____1_Stop__&#34;, &#34;duration&#34;: &#34;00:02:24&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;testcases/test_searchflights.py::TestSearchAndVerifyFilter::test_search_flights_1_stop_1___New_Delhi____New____28_March_2025____1_Stop__&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;00:02:24&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;a target=\&#34;_blank\&#34; href=\&#34;https://www.yatra.com/\&#34; class=\&#34;col-links__extra url\&#34;&gt;URL&lt;/a&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;----------------------------- Captured stdout call -----------------------------\nReached the bottom of the flight results.\nFlight details: 1 Stop\nFlight details: 1 Stop\nFlight details: 1 Stop\nFlight details: 1 Stop\nFlight details: 1 Stop\nFlight details: 1 Stop\nFlight details: 1 Stop\nFlight details: 1 Stop\nFlight details: 1 Stop\nFlight details: 1 Stop\nFlight details: 1 Stop\nFlight details: 1 Stop\nFlight details: 1 Stop\nFlight details: 1 Stop\nFlight details: 1 Stop\nFlight details: 1 Stop\nFlight details: 1 Stop\nFlight details: 1 Stop\nFlight details: 1 Stop\nFlight details: 1 Stop\nFlight details: 1 Stop\nFlight details: 1 Stop\nFlight details: 1 Stop\nFlight details: 1 Stop\nFlight details: 1 Stop\nFlight details: 1 Stop\nFlight details: 1 Stop\nFlight details: 1 Stop\nFlight details: 1 Stop\nFlight details: 1 Stop\nFlight details: 1 Stop\nFlight details: 1 Stop\nFlight details: 1 Stop\nFlight details: 1 Stop\nFlight details: 1 Stop\nFlight details: 1 Stop\nFlight details: 1 Stop\nFlight details: 1 Stop\nFlight details: 1 Stop\nFlight details: 1 Stop\nFlight details: 1 Stop\nFlight details: 1 Stop\nFlight details: 1 Stop\nFlight details: 1 Stop\nFlight details: 1 Stop\nFlight details: 1 Stop\nFlight details: 1 Stop\nFlight details: 1 Stop\nFlight details: 1 Stop\nFlight details: 1 Stop\nFlight details: 1 Stop\nFlight details: 1 Stop\nFlight details: 1 Stop\nFlight details: 1 Stop\nFlight details: 1 Stop\nFlight details: 1 Stop\nFlight details: 1 Stop\nFlight details: 1 Stop\nFlight details: 1 Stop\nFlight details: 1 Stop\nFlight details: 1 Stop\nFlight details: 1 Stop\nFlight details: 1 Stop\nFlight details: 1 Stop\nFlight details: 1 Stop\nFlight details: 1 Stop\nFlight details: 1 Stop\nFlight details: 1 Stop\nFlight details: 1 Stop\nFlight details: 1 Stop\nFlight details: 1 Stop\nFlight details: 1 Stop\nFlight details: 1 Stop\nFlight details: 1 Stop\nFlight details: 1 Stop\nFlight details: 1 Stop\nFlight details: 1 Stop\nFlight details: 1 Stop\nFlight details: 1 Stop\nFlight details: 1 Stop\nFlight details: 1 Stop\nFlight details: 1 Stop\nFlight details: 1 Stop\nFlight details: 1 Stop\nFlight details: 1 Stop\nFlight details: 1 Stop\nFlight details: 1 Stop\nFlight details: 1 Stop\nFlight details: 1 Stop\nFlight details: 1 Stop\nFlight details: 1 Stop\nFlight details: 1 Stop\n\u2705 Flights found with 1 Stop: 92\n\u2705 Test Passed: All displayed flights have 1 Stop.\n\n------------------------------ Captured log call -------------------------------\nINFO     LaunchPage:yatra_launch_page.py:80 New Delhi, (DEL)\nIndira Gandhi International\nIndia\nINFO     LaunchPage:yatra_launch_page.py:80 New York, (NYC)\nAll airports\nUnited States\nINFO     LaunchPage:yatra_launch_page.py:80 New York, (JFK)\nJohn F Kennedy\nUnited States\nINFO     LaunchPage:yatra_launch_page.py:109 Looking for date: Choose Friday, March 28th, 2025\nINFO     LaunchPage:yatra_launch_page.py:119 Checking: 28 | Aria-label: Choose Friday, March 28th, 2025\nWARNING  SearchFlightResults:search_flights_results_page.py:41 Selected flights with 1 Stop\n\n&#34;}], &#34;testcases/test_searchflights.py::TestSearchAndVerifyFilter::test_search_flights_1_stop_2___New_Delhi____New____28_March_2025____2_Stop__&#34;: [{&#34;extras&#34;: [{&#34;name&#34;: &#34;URL&#34;, &#34;format_type&#34;: &#34;url&#34;, &#34;content&#34;: &#34;https://www.yatra.com/&#34;, &#34;mime_type&#34;: null, &#34;extension&#34;: null}, {&#34;name&#34;: null, &#34;format_type&#34;: &#34;html&#34;, &#34;content&#34;: &#34;&lt;div&gt;&lt;img src=\&#34;testcases_test_searchflights.py_TestSearchAndVerifyFilter_test_search_flights_1_stop_2___New_Delhi____New____28_March_2025____2_Stop__.png\&#34; alt=\&#34;screenshot\&#34; style=\&#34;width:300px; height:200px;\&#34; onclick=\&#34;window.open(this.src)\&#34; align=\&#34;right\&#34;/&gt;&lt;/div&gt;&#34;, &#34;mime_type&#34;: null, &#34;extension&#34;: null}], &#34;result&#34;: &#34;Failed&#34;, &#34;testId&#34;: &#34;testcases/test_searchflights.py::TestSearchAndVerifyFilter::test_search_flights_1_stop_2___New_Delhi____New____28_March_2025____2_Stop__&#34;, &#34;duration&#34;: &#34;00:01:53&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Failed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;testcases/test_searchflights.py::TestSearchAndVerifyFilter::test_search_flights_1_stop_2___New_Delhi____New____28_March_2025____2_Stop__&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;00:01:53&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;a target=\&#34;_blank\&#34; href=\&#34;https://www.yatra.com/\&#34; class=\&#34;col-links__extra url\&#34;&gt;URL&lt;/a&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;self = &amp;lt;testcases.test_searchflights.TestSearchAndVerifyFilter testMethod=test_search_flights_1_stop_2___New_Delhi____New____28_March_2025____2_Stop__&amp;gt;\ndepartlocation = &amp;#x27;New Delhi&amp;#x27;, goingtolocation = &amp;#x27;New&amp;#x27;, departuredate = &amp;#x27;28 March 2025&amp;#x27;, stop_count = &amp;#x27;2 Stop&amp;#x27;\n\n    @data(*Utils.read_data_from_csv(&amp;quot;C:\\\\python-selenium\\\\TestFrameworkDemo\\\\testdata\\\\tdata_csv.csv&amp;quot;))\n    @unpack\n    def test_search_flights_1_stop(self, departlocation, goingtolocation, departuredate, stop_count):\n        # Step 1: Search for flights\n        search_flight_result = self.lp.searchFlights(departlocation, goingtolocation, departuredate)\n        self.lp.page_scroll()\n    \n        # Step 2: Apply the stop filter dynamically\n        search_flight_result.filter_flights_by_stops(stop_count)\n    \n        # Step 3: Wait for filtered results to load dynamically\n        wait = WebDriverWait(self.driver, 10)\n        wait.until(EC.presence_of_all_elements_located(\n            (By.XPATH, f&amp;quot;//span[contains(normalize-space(text()), &amp;#x27;{stop_count}&amp;#x27;)]&amp;quot;)))\n    \n        # Step 4: Get all displayed flights matching the selected stop count\n        all_stop_flights = self.driver.find_elements(By.XPATH,\n                                                     f&amp;quot;//span[contains(normalize-space(text()), &amp;#x27;{stop_count}&amp;#x27;)]&amp;quot;)\n    \n        # Step 5: Filter out elements with empty or incomplete text\n        valid_stop_flights = [flight for flight in all_stop_flights if flight.text.strip()]\n    \n        # Verify all the flights\n        for flight in valid_stop_flights:\n            print(f&amp;quot;Flight details: {flight.text}&amp;quot;)\n    \n        # Step 6: Verify that flights exist after filtering\n        assert len(valid_stop_flights) &amp;gt; 0, f&amp;quot;\u274c No flights found after applying the {stop_count} filter.&amp;quot;\n    \n        # Step 7: Print the number of filtered flights\n        print(f&amp;quot;\u2705 Flights found with {stop_count}: {len(valid_stop_flights)}&amp;quot;)\n    \n        # Step 8: Verify that each flight matches the selected stop count\n        for flight in valid_stop_flights:\n            assert stop_count in flight.text, f&amp;quot;\u274c A flight does not match the filter {stop_count}. Flight details: {flight.text}&amp;quot;\n    \n        # Intentional failure for specific stop_count values\n        if stop_count == &amp;quot;2 Stop&amp;quot;:  # Fail if stop_count is 2\n&amp;gt;           assert False, f&amp;quot;\u274c Intentional failure for stop_count = {stop_count} to test screenshot functionality.&amp;quot;\nE           AssertionError: \u274c Intentional failure for stop_count = 2 Stop to test screenshot functionality.\nE           assert False\n\ntestcases\\test_searchflights.py:88: AssertionError\n\n----------------------------- Captured stdout call -----------------------------\nReached the bottom of the flight results.\nFlight details: 2 Stops\nFlight details: 2 Stops\nFlight details: 2 Stops\nFlight details: 2 Stops\nFlight details: 2 Stops\nFlight details: 2 Stops\nFlight details: 2 Stops\nFlight details: 2 Stops\nFlight details: 2 Stops\nFlight details: 2 Stops\nFlight details: 2 Stops\nFlight details: 2 Stops\nFlight details: 2 Stops\nFlight details: 2 Stops\nFlight details: 2 Stops\nFlight details: 2 Stops\nFlight details: 2 Stops\nFlight details: 2 Stops\nFlight details: 2 Stops\nFlight details: 2 Stops\nFlight details: 2 Stops\nFlight details: 2 Stops\nFlight details: 2 Stops\nFlight details: 2 Stops\nFlight details: 2 Stops\nFlight details: 2 Stops\nFlight details: 2 Stops\nFlight details: 2 Stops\nFlight details: 2 Stops\nFlight details: 2 Stops\nFlight details: 2 Stops\nFlight details: 2 Stops\nFlight details: 2 Stops\nFlight details: 2 Stops\nFlight details: 2 Stops\nFlight details: 2 Stops\nFlight details: 2 Stops\nFlight details: 2 Stops\n\u2705 Flights found with 2 Stop: 38\n\n------------------------------ Captured log call -------------------------------\nINFO     LaunchPage:yatra_launch_page.py:80 New Delhi, (DEL)\nIndira Gandhi International\nIndia\nINFO     LaunchPage:yatra_launch_page.py:80 New York, (NYC)\nAll airports\nUnited States\nINFO     LaunchPage:yatra_launch_page.py:80 New York, (JFK)\nJohn F Kennedy\nUnited States\nINFO     LaunchPage:yatra_launch_page.py:109 Looking for date: Choose Friday, March 28th, 2025\nINFO     LaunchPage:yatra_launch_page.py:119 Checking: 28 | Aria-label: Choose Friday, March 28th, 2025\nWARNING  SearchFlightResults:search_flights_results_page.py:41 Selected flights with 2 Stop\n\n&#34;}]}, &#34;renderCollapsed&#34;: [&#34;passed&#34;], &#34;initialSort&#34;: &#34;result&#34;, &#34;title&#34;: &#34;My First Automation Test Case Report&#34;}"></div>
+    <div id="data-container" data-jsonblob="{&#34;environment&#34;: {&#34;Python&#34;: &#34;3.12.8&#34;, &#34;Platform&#34;: &#34;Windows-10-10.0.19045-SP0&#34;, &#34;Packages&#34;: {&#34;pytest&#34;: &#34;8.3.4&#34;, &#34;pluggy&#34;: &#34;1.5.0&#34;}, &#34;Plugins&#34;: {&#34;Faker&#34;: &#34;35.0.0&#34;, &#34;html&#34;: &#34;4.1.1&#34;, &#34;metadata&#34;: &#34;3.1.1&#34;}, &#34;JAVA_HOME&#34;: &#34;C:\\Program Files\\Java\\jdk-11&#34;}, &#34;tests&#34;: {}, &#34;renderCollapsed&#34;: [&#34;passed&#34;], &#34;initialSort&#34;: &#34;result&#34;, &#34;title&#34;: &#34;My First Automation Test Case Report&#34;}"></div>
     <script>
       (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 const { getCollapsedCategory, setCollapsedIds } = require('./storage.js')
