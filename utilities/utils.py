@@ -96,5 +96,12 @@ class Utils(softest.TestCase):
                         except (ValueError, KeyError) as e:
                             print(f"Error converting date {date_str}: {e}")
                 datalist.append(rows)
-
+            if "-" in date_str:
+                try:
+                    day, month_abbr, year = date_str.split("-")
+                    month = month_map[month_abbr]
+                    rows[2] = f"{day} {month} 2025"
+                    print(f"Converted date: {rows[2]}")  # Debug print
+                except (ValueError, KeyError) as e:
+                    print(f"Error converting date {date_str}: {e}")
         return datalist

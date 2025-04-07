@@ -2,8 +2,6 @@ import logging
 import time
 import datetime
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.wait import WebDriverWait
-
 from base.base_driver import BaseDriver
 from pages.search_flights_results_page import SearchFlightResults
 from utilities.utils import Utils
@@ -90,66 +88,39 @@ class LaunchPage(BaseDriver):
         self.getcalendar().click()
         self.dismissoverlay()
 
-        # Parse the input date
-        if len(departuredate.split()) == 2:  # If only "April 28" format
+        # If only "March 28" is provided, append the current year
+        if len(departuredate.split()) == 2:
             current_year = datetime.datetime.now().year
             departuredate += f" {current_year}"
 
+        # Convert to datetime object
         departure_dt = datetime.datetime.strptime(departuredate, "%d %B %Y")
 
-        # Navigate to correct month if needed
-        self._navigate_to_correct_month(departure_dt)
+        # Format date for the website
+        day_with_suffix = departure_dt.strftime("%d").lstrip("0") + (
+            "st" if departure_dt.day in [1, 21, 31] else
+            "nd" if departure_dt.day in [2, 22] else
+            "rd" if departure_dt.day in [3, 23] else "th"
+        )
 
-        # Format date for matching aria-label
-        day_with_suffix = self._get_day_with_suffix(departure_dt.day)
+        # **Updated format to match "Choose Friday, March 28th, 2025"**
         formatted_date = f"Choose {departure_dt.strftime('%A, %B')} {day_with_suffix}, {departure_dt.year}"
+
         self.log.info(f"Looking for date: {formatted_date}")
 
-        # Find and click the date (updated XPath to exclude disabled dates)
-        date_xpath = f"""
-        //div[contains(@class,'react-datepicker__day') 
-        and contains(@aria-label,'{formatted_date}')
-        and not(contains(@class,'react-datepicker__day--disabled'))
-        and not(contains(@class,'react-datepicker__day--outside-month'))
-        """
-        try:
-            date_element = self.wait_until_element_is_clickable(By.XPATH, date_xpath)
-            date_element.click()
-        except Exception as e:
-            self.log.error(f"Failed to select date {formatted_date}")
-            self.driver.save_screenshot("date_selection_error.png")
-            raise
+        # Construct a dynamic XPath that targets the correct month and day
+        DATE_CONTAINER = f"//div[contains(@class,'react-datepicker__month')]//div[contains(@aria-label, '{formatted_date}')]"
 
-    def _navigate_to_correct_month(self, departure_dt):
-        current_month_text = self.wait_until_visibility_of_element_located(
-            By.XPATH, "//div[contains(@class,'react-datepicker__current-month')]").text
-        current_month, current_year = current_month_text.split()
-        current_year = int(current_year)
-        current_month_num = datetime.datetime.strptime(current_month, "%B").month
-
-        while (current_month_num, current_year) != (departure_dt.month, departure_dt.year):
-            if (departure_dt.year > current_year) or \
-                    (departure_dt.year == current_year and departure_dt.month > current_month_num):
-                next_btn = self.wait_until_element_is_clickable(
-                    By.XPATH, "//button[contains(@class,'react-datepicker__navigation--next')]")
-                next_btn.click()
-            else:
-                prev_btn = self.wait_until_element_is_clickable(
-                    By.XPATH, "//button[contains(@class,'react-datepicker__navigation--previous')]")
-                prev_btn.click()
-
-            # Update current month after navigation
-            current_month_text = self.wait_until_visibility_of_element_located(
-                By.XPATH, "//div[contains(@class,'react-datepicker__current-month')]").text
-            current_month, current_year = current_month_text.split()
-            current_year = int(current_year)
-            current_month_num = datetime.datetime.strptime(current_month, "%B").month
-
-    def _get_day_with_suffix(self, day):
-        if 4 <= day <= 20 or 24 <= day <= 30:
-            return f"{day}th"
-        else:
-            return f"{day}{['st', 'nd', 'rd'][day % 10 - 1]}"
+        all_dates = self.calendarvisibility()
+        for date in all_dates:
+            date_container = date.find_element(By.XPATH, DATE_CONTAINER)
+            aria_label = date_container.get_attribute("aria-label")
+            date_text = date_container.text.strip()
+            self.log.info(f"Checking: {date_text} | Aria-label: {aria_label}")  # Debugging step
+            if formatted_date in aria_label:
+                date_container.click()
+                break
+        time.sleep(4)
 
     # CLick on the search results btn
     def clickSearchBtn(self):
@@ -192,31 +163,3 @@ class LaunchPage(BaseDriver):
     #     for result in search_results:
     #         # print(result.text)
     #         if "New York, (JFK)" in result.text:
-    #             # Use explicit wait to ensure the element is clickable
-    #             self.click_when_clickable(result)
-    #             break
-
-    # def selectdate(self,departuredate):
-    #     calendar = self.wait_until_element_is_clickable(By.XPATH, "//div[@class='css-w7k25o']")
-    #     calendar.click()
-    #     # Wait for any overlay or modal to disappear
-    #     self.wait_until_invisibility_of_the_element(By.CLASS_NAME, "MuiBackdrop-root")
-    #     # Wait for calendar to be visible
-    #     all_dates = self.wait_for_the_presence_of_all_elements(By.XPATH,
-    #                                                                      "//div[contains(@class,'dual-calendar')]//div[contains(@class,'react-datepicker__day') and not(contains(@class,'react-datepicker__day--disabled'))]//span")
-    #
-    #     for date in all_dates:
-    #         date_container = date.find_element(By.XPATH, "./ancestor::div[contains(@class,'react-datepicker__day')]")
-    #         aria_label = date_container.get_attribute("aria-label")
-    #         date_text = date.text.strip()
-    #         print("Date:", date_text, "| Aria-label:", aria_label)  # Debugging step
-    #         if departuredate in aria_label:
-    #             date_container.click()
-    #             break
-    #     time.sleep(4)
-
-    # Search button click
-    # def clicksearch(self):
-    #     search_btn = self.wait_until_element_is_clickable(By.XPATH, "//button[normalize-space()='Search']")
-    #     search_btn.click()
-    #     time.sleep(3)
