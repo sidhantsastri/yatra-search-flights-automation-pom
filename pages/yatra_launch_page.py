@@ -163,31 +163,3 @@ class LaunchPage(BaseDriver):
     #     for result in search_results:
     #         # print(result.text)
     #         if "New York, (JFK)" in result.text:
-    #             # Use explicit wait to ensure the element is clickable
-    #             self.click_when_clickable(result)
-    #             break
-
-    # def selectdate(self,departuredate):
-    #     calendar = self.wait_until_element_is_clickable(By.XPATH, "//div[@class='css-w7k25o']")
-    #     calendar.click()
-    #     # Wait for any overlay or modal to disappear
-    #     self.wait_until_invisibility_of_the_element(By.CLASS_NAME, "MuiBackdrop-root")
-    #     # Wait for calendar to be visible
-    #     all_dates = self.wait_for_the_presence_of_all_elements(By.XPATH,
-    #                                                                      "//div[contains(@class,'dual-calendar')]//div[contains(@class,'react-datepicker__day') and not(contains(@class,'react-datepicker__day--disabled'))]//span")
-    #
-    #     for date in all_dates:
-    #         date_container = date.find_element(By.XPATH, "./ancestor::div[contains(@class,'react-datepicker__day')]")
-    #         aria_label = date_container.get_attribute("aria-label")
-    #         date_text = date.text.strip()
-    #         print("Date:", date_text, "| Aria-label:", aria_label)  # Debugging step
-    #         if departuredate in aria_label:
-    #             date_container.click()
-    #             break
-    #     time.sleep(4)
-
-    # Search button click
-    # def clicksearch(self):
-    #     search_btn = self.wait_until_element_is_clickable(By.XPATH, "//button[normalize-space()='Search']")
-    #     search_btn.click()
-    #     time.sleep(3)

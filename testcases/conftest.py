@@ -9,27 +9,40 @@ from webdriver_manager.firefox import GeckoDriverManager
 from selenium.webdriver.edge.service import Service as EdgeService
 from webdriver_manager.microsoft import EdgeChromiumDriverManager
 
-# ✅ Step 1: Add browser option for command-line argument
+# 1. Define a default reports directory at the module level
+DEFAULT_REPORT_DIR = os.path.join(os.getcwd(), "reports")
+SCREENSHOTS_DIR = os.path.join(DEFAULT_REPORT_DIR, "screenshots")
+
+
 def pytest_addoption(parser):
     parser.addoption("--browser", action="store", default="chrome", help="Browser to run tests")
-    parser.addoption("--url")
+    parser.addoption("--url", action="store", default="https://www.yatra.com")
+    #parser.addoption("--html", action="store", default=os.path.join(DEFAULT_REPORT_DIR, "report.html"),
+    #                 help="Path to html report")
 
-# ✅ Step 2: Fixture to get browser type from command-line argument
+
 @pytest.fixture(scope="session", autouse=True)
 def browser(request):
     return request.config.getoption("--browser")
 
-# ✅ Step 3: Fixture to get url type from command-line argument like production or qa environment
+
 @pytest.fixture(scope="session", autouse=True)
 def url(request):
     return request.config.getoption("--url")
 
-# ✅ Step 3: Setup fixture to launch browser based on the argument
+
+# 2. Create a session-scoped fixture to ensure report directories exist
+@pytest.fixture(scope="session", autouse=True)
+def setup_report_dirs():
+    os.makedirs(DEFAULT_REPORT_DIR, exist_ok=True)
+    os.makedirs(SCREENSHOTS_DIR, exist_ok=True)
+    yield
+
+
 @pytest.fixture(scope="class")
 def setup(request, browser, url):
     if browser == "chrome":
         chrome_service = Service(ChromeDriverManager().install())
-        # Driver - There has to be driver which drives through all the pages
         driver = webdriver.Chrome(service=chrome_service)
     elif browser == "firefox":
         service = FirefoxService(GeckoDriverManager().install())
@@ -42,15 +55,13 @@ def setup(request, browser, url):
 
     driver.get(url)
     driver.maximize_window()
-
     request.cls.driver = driver
-    # Use a try-finally block to ensure the browser is always closed
-    try:
-        yield  # This is where the test case runs
-    finally:
-        driver.quit()
 
-# Insert screenshots when test case is failed in the html report
+    yield
+    driver.quit()
+
+
+# 3. Simplified and robust report generation
 @pytest.hookimpl(hookwrapper=True)
 def pytest_runtest_makereport(item, call):
     outcome = yield
@@ -58,39 +69,23 @@ def pytest_runtest_makereport(item, call):
     extras = getattr(report, "extras", [])
 
     if report.when == "call":
-        # Always add URL to report
-        extras.append(pytest_html.extras.url("https://www.yatra.com/"))
+        extras.append(pytest_html.extras.url(item.funcargs["url"]))
 
-        xfail = hasattr(report, "wasxfail")
-        if (report.skipped and xfail) or (report.failed and not xfail):
-            # Only add additional HTML on failure
-            report_directory = os.path.dirname(item.config.option.htmlpath)
-            file_name = report.nodeid.replace("::", "_").replace("/", "_") + ".png"  # Normalize file path
-            destination_file = os.path.join(report_directory, file_name)
+        if report.failed:
+            try:
+                driver = item.cls.driver
+                screenshot_name = f"{item.nodeid.replace('::', '_')}.png"
+                screenshot_path = os.path.join(SCREENSHOTS_DIR, screenshot_name)
+                driver.save_screenshot(screenshot_path)
 
-            # Ensure the report directory exists
-            os.makedirs(report_directory, exist_ok=True)
-
-            # Capture screenshot if the test fails
-            driver = getattr(item.cls, "driver", None)  # Get the WebDriver instance from the test class
-            if driver is not None and isinstance(driver, webdriver.Remote):
-                try:
-                    print(f"🖥️ Attempting to capture screenshot for failed test: {report.nodeid}")
-                    print(f"📂 Destination file: {destination_file}")
-                    driver.save_screenshot(destination_file)  # Save the screenshot
-                    print(f"📸 Screenshot saved to: {destination_file}")
-
-                    # Use a relative path for the HTML report
-                    relative_file_path = os.path.relpath(destination_file, start=report_directory)
-                    html = f'<div><img src="{relative_file_path}" alt="screenshot" style="width:300px; height:200px;" onclick="window.open(this.src)" align="right"/></div>'
-                    extras.append(pytest_html.extras.html(html))
-                    print(f"🖼️ Screenshot added to HTML report with relative path: {relative_file_path}")
-                except Exception as e:
-                    print(f"❌ Failed to capture or embed screenshot: {e}")
-            else:
-                print(f"❌ Driver instance not found or invalid: {driver}")
+                # Use relative path for HTML report
+                rel_path = os.path.relpath(screenshot_path, start=DEFAULT_REPORT_DIR)
+                extras.append(pytest_html.extras.image(rel_path))
+            except Exception as e:
+                print(f"⚠️ Could not capture screenshot: {e}")
 
         report.extras = extras
 
+
 def pytest_html_report_title(report):
-    report.title = "My First Automation Test Case Report"
+    report.title = "Yatra.com Test Automation Report"
